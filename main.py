@@ -334,6 +334,7 @@ class WishlistApp(tk.Tk):
             self.show_selected_item
         )
 
+        
         # Product preview
         preview = tk.Frame(
             content,
@@ -351,28 +352,56 @@ class WishlistApp(tk.Tk):
 
         preview.pack_propagate(False)
 
+        # Item Details heading
         tk.Label(
             preview,
             text="Item Details",
             bg=WHITE,
             fg=DARK_PINK,
             font=("Georgia", 16, "bold")
-        ).pack(pady=(0, 12))
+        ).pack(pady=(0, 10))
 
+        # Product image
         self.image_label = tk.Label(
             preview,
             text="No image selected",
             bg=BG,
             fg=LIGHT_TEXT,
-            width=25,
-            height=5
+            anchor="center"
         )
 
-        self.image_label.pack(fill="x", pady=5)
+        self.image_label.pack(
+            fill="x",
+            pady=5
+        )
 
-        # Buttons at the bottom of the preview
-        button_frame = tk.Frame(preview, bg=WHITE)
-        button_frame.pack(side="bottom", fill="x")
+        # Item information
+        self.detail_label = tk.Label(
+            preview,
+            text="Select a product to see details.",
+            bg=WHITE,
+            fg=TEXT,
+            font=("Arial", 8),
+            justify="left",
+            wraplength=215
+        )
+
+        self.detail_label.pack(
+            anchor="w",
+            fill="x",
+            pady=4
+        )
+
+        # Buttons at the bottom
+        button_frame = tk.Frame(
+            preview,
+            bg=WHITE
+        )
+
+        button_frame.pack(
+            side="bottom",
+            fill="x"
+        )
 
         buttons = [
             ("Edit Item", self.edit_item),
@@ -388,61 +417,10 @@ class WishlistApp(tk.Tk):
                 bg=LAVENDER,
                 fg=TEXT,
                 relief="flat",
-                font=("Arial", 9, "bold"),
-                pady=5
+                font=("Arial", 8, "bold"),
+                pady=7
             ).pack(fill="x", pady=3)
 
-        # Item Details heading
-        tk.Label(
-            preview,
-            text="Item Details",
-            bg=WHITE,
-            fg=DARK_PINK,
-            font=("Georgia", 16, "bold")
-        ).pack(pady=(0, 8))
-
-        # Product image
-        self.image_label = tk.Label(
-            preview,
-            text="No image selected",
-            bg=BG,
-            fg=LIGHT_TEXT,
-            width=25,
-            height=4
-        )
-
-        self.image_label.pack(fill="x", pady=4)
-
-        # Item information
-        self.detail_label = tk.Label(
-            preview,
-            text="Select a product to see details.",
-            bg=WHITE,
-            fg=TEXT,
-            font=("Arial", 9),
-            justify="left",
-            wraplength=215
-        )
-
-        self.detail_label.pack(
-            anchor="w",
-            fill="x",
-            pady=5
-        )
-
-
-        for text, command in buttons:
-
-            tk.Button(
-                preview,
-                text=text,
-                command=command,
-                bg=LAVENDER,
-                fg=TEXT,
-                relief="flat",
-                font=("Arial", 9, "bold"),
-                pady=8
-            ).pack(fill="x", pady=5)
 
     # ---------------- REFRESH DATA ----------------
 
@@ -539,6 +517,7 @@ class WishlistApp(tk.Tk):
 
         if item is None:
             return
+        
 
         self.detail_label.config(
             text=(
@@ -554,8 +533,8 @@ class WishlistApp(tk.Tk):
 
         if item[5]:
             try:
-                image = Image.open(item[5])
-                image.thumbnail((215, 120))
+                image = Image.open(item[5]).convert("RGB")
+                image.thumbnail((100, 100), Image.Resampling.LANCZOS)
 
                 self.current_photo = ImageTk.PhotoImage(image)
 
